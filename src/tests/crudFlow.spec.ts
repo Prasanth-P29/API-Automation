@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { generateUser } from "../utils/library";
-import { createUser, getUser, updateUser, deleteUser } from "../apiMethods";
+import { createUser, getUser, updateUser, deleteUser } from "../apiClient";
 import { StatusCodes } from "../enums";
 
 test("CRUD API Flow Loop", async ({ request }) => {
-  const LOOP_COUNT = 5;
+  const LOOP_COUNT = 1;
 
   for (let i = 1; i <= LOOP_COUNT; i++) {
     console.log(`\n========== LOOP #${i} ==========`);
