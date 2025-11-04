@@ -1,20 +1,6 @@
-import { request, APIRequestContext } from "@playwright/test";
-import * as fs from "fs";
+import propertiesReader from "properties-reader";
+import path from "path";
 
-export async function initializeApiClient(): Promise<APIRequestContext> {
-  const properties = fs.readFileSync("src/config.properties", "utf-8");
-  const baseURLLine = properties.split("\n").find(line => line.startsWith("BASE_URL"));
-  const baseURL = baseURLLine?.split("=")[1].trim();
+const properties = propertiesReader(path.resolve(__dirname, "./config.properties"));
 
-  console.log("🌐 API client initialized with base URL:", baseURL);
-
-  const context = await request.newContext({
-    baseURL,
-    extraHTTPHeaders: {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    },
-  });
-
-  return context;
-}
+export const baseUrl: string = properties.get("baseUrl") as string;

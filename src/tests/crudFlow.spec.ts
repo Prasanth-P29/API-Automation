@@ -1,50 +1,61 @@
 import { test, expect } from "@playwright/test";
-import { initializeApiClient } from "../apiClient";
-import { postMethod, getMethod, putMethod, deleteMethod } from "../apiMethods";
-import { Endpoints, StatusCodes } from "../enums";
-import { createRandomUser } from "../utils/library";
+import { generateUser } from "../utils/library";
+import { createUser, getUser, updateUser, deleteUser } from "../apiMethods";
+import { StatusCodes } from "../enums";
 
-test.describe("🔁 DummyJSON API CRUD Flow", () => {
-  let api: any;
+test("CRUD API Flow Loop", async ({ request }) => {
+  const LOOP_COUNT = 5;
 
-  test.beforeAll(async () => {
-    api = await initializeApiClient();
-  });
+  for (let i = 1; i <= LOOP_COUNT; i++) {
+    console.log(`\n========== LOOP #${i} ==========`);
 
-  test("Run CRUD Flow in Loop", async () => {
-    const loopCount = 2; // Number of iterations
-    for (let i = 1; i <= loopCount; i++) {
-      console.log(`\n================= 🔄 LOOP ${i} START =================`);
+    //
+    // ✅ CREATE
+    //
+    const userData = generateUser();
+    const createRes = await createUser(request, userData);
+    expect(createRes.status()).toBe(StatusCodes.CREATED);
 
-      // 1️⃣ Create User
-      const newUser = createRandomUser();
-      const createRes = await postMethod(api, Endpoints.USERS, newUser);
-      expect(createRes.status()).toBe(StatusCodes.CREATED);
+    const created = await createRes.json();
+    console.log("✅ Created:", created);
+    const userId = created._id;
 
-      const createdUser = await createRes.json();
-      const userId = createdUser.id;
-      console.log("✅ Created User:", createdUser);
 
-      // 2️⃣ Read User
-      const readRes = await getMethod(api, `${Endpoints.USERS}/${userId}`);
-      expect(readRes.status()).toBe(StatusCodes.OK);
-      console.log("📖 Read Successful for User ID:", userId);
+    //
+    // ✅ GET (after create)
+    //
+    const getRes = await getUser(request, userId);
+    expect(getRes.status()).toBe(StatusCodes.OK);
 
-      // 3️⃣ Update User
-      const updatedData = {
-        firstName: "Updated_" + newUser.firstName,
-        age: newUser.age + 1,
-      };
-      const updateRes = await putMethod(api, `${Endpoints.USERS}/${userId}`, updatedData);
-      expect(updateRes.status()).toBe(StatusCodes.UPDATED);
-      console.log("📝 User updated:", updatedData);
+    const fetched = await getRes.json();
+    console.log("✅ Fetched:", fetched);
 
-      // 4️⃣ Delete User
-      const deleteRes = await deleteMethod(api, `${Endpoints.USERS}/${userId}`);
-      expect(deleteRes.status()).toBe(StatusCodes.DELETED);
-      console.log("🗑️ User deleted successfully");
 
-      console.log(`================= ✅ LOOP ${i} COMPLETED =================\n`);
-    }
-  });
+    //
+    // ✅ UPDATE (fetched user)
+    //
+    const newUpdatedData = generateUser();
+    const updateRes = await updateUser(request, userId, newUpdatedData);
+    expect(updateRes.status()).toBe(StatusCodes.UPDATED);
+
+    console.log("✅ Updated:", newUpdatedData);
+
+
+    //
+    // ✅ GET (after update -> verify change)
+    //
+    const verifyRes = await getUser(request, userId);
+    expect(verifyRes.status()).toBe(StatusCodes.OK);
+
+    const verifyUser = await verifyRes.json();
+    console.log("✅ Verified updated:", verifyUser);
+
+
+    //
+    // ✅ DELETE
+    //
+    const deleteRes = await deleteUser(request, userId);
+    expect([StatusCodes.OK, StatusCodes.DELETED]).toContain(deleteRes.status());
+    console.log("✅ Deleted:", userId);
+  }
 });

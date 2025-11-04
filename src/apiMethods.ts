@@ -1,28 +1,19 @@
 import { APIRequestContext } from "@playwright/test";
+import { baseUrl } from "./apiClient";
+import { Endpoints } from "./enums";
 
-export async function postMethod(api: APIRequestContext, endpoint: string, body: any) {
-  console.log("➡️ POST:", endpoint);
-  console.log("Body:", body);
+export const createUser = async (request: APIRequestContext, data: any) => {
+  return await request.post(`${baseUrl}${Endpoints.USERS}`, { data });
+};
 
-  const response = await api.post(endpoint, { json: body } as any);
-  return response;
-}
+export const getUser = async (request: APIRequestContext, id: string) => {
+  return await request.get(`${baseUrl}${Endpoints.USERS}/${id}`);
+};
 
-export async function getMethod(api: APIRequestContext, endpoint: string) {
-  console.log("➡️ GET:", endpoint);
-  const response = await api.get(endpoint);
-  return response;
-}
+export const updateUser = async (request: APIRequestContext, id: string, data: any) => {
+  return await request.put(`${baseUrl}${Endpoints.USERS}/${id}`, { data });
+};
 
-export async function putMethod(api: APIRequestContext, endpoint: string, body: any) {
-  console.log("➡️ PUT:", endpoint);
-  console.log("Body:", body);
-  const response = await api.put(endpoint, { json: body } as any);
-  return response;
-}
-
-export async function deleteMethod(api: APIRequestContext, endpoint: string) {
-  console.log("➡️ DELETE:", endpoint);
-  const response = await api.delete(endpoint);
-  return response;
-}
+export const deleteUser = async (request: APIRequestContext, id: string) => {
+  return await request.delete(`${baseUrl}${Endpoints.USERS}/${id}`);
+};
