@@ -14,6 +14,8 @@ export const updateUserSchema: JSONSchemaType<UpdateUserResponse> = {
     age: { type: "integer", minimum: 18, maximum: 60 },
     job: { type: "string" },
     _id: { type: "string" },
+    createdAt: { type: "string" },
+    avatar: { type: "string" },
   },
   required: ["name", "age", "job", "_id"],
   additionalProperties: false,
