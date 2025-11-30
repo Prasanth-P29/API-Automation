@@ -1,13 +1,13 @@
 import { JSONSchemaType } from "ajv";
 
-export interface UpdateUserResponse {
+export interface UpdateUserResponse { // Define the interface for the update user response
   name: string;
   age: number;
   job: string;
   _id: string;
 }
 
-export const updateUserSchema: JSONSchemaType<UpdateUserResponse> = {
+export const updateUserSchema: JSONSchemaType<UpdateUserResponse> = {  // Define the JSON schema for update user response
   type: "object",
   properties: {
     name: { type: "string" },
