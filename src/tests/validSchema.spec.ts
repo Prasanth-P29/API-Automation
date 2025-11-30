@@ -4,22 +4,22 @@ import { createUser, getUser, updateUser } from "../apiClient";
 import { StatusCodes } from "../enums";
 
 import { validateSchema } from "../utils/validateSchema";
-import { createUserSchema } from "../schemas/CreateUserSchema";
+import { createUserSchema } from "../schemas/createUserSchema";
 import { updateUserSchema } from "../schemas/updateUserSchema";
 
-test("Validate Schema for CREATE and UPDATE response", async ({ request }) => {
+test("Validate Schema for CREATE and UPDATE response", async ({ request }) => {  // Validate schemas for create and update user responses
   //
   // ✅ CREATE
   //
   const userPayload = generateUser();
-  const createRes = await createUser(request, userPayload);
+  const createRes = await createUser(request, userPayload);  // Create user request
   expect(createRes.status()).toBe(StatusCodes.CREATED);
 
   const createdBody = await createRes.json();
   console.log("✅ Created Response:", createdBody);
 
   // ✅ validate CREATE schema
-  expect(validateSchema(createUserSchema, createdBody)).toBeTruthy();
+  expect(validateSchema(createUserSchema, createdBody)).toBeTruthy();   // Validating the created user response schema
 
   const userId = createdBody._id;
 
@@ -40,5 +40,5 @@ test("Validate Schema for CREATE and UPDATE response", async ({ request }) => {
   console.log("✅ Updated User Response:", updatedUser);
 
   // ✅ validate UPDATE schema
-  expect(validateSchema(updateUserSchema, updatedUser)).toBeTruthy();
+  expect(validateSchema(updateUserSchema, updatedUser)).toBeTruthy();  // Validating the updated user response schema
 });

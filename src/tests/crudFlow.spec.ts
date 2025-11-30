@@ -3,7 +3,7 @@ import { generateUser } from "../utils/library";
 import { createUser, getUser, updateUser, deleteUser } from "../apiClient";
 import { StatusCodes } from "../enums";
 
-test("CRUD API Flow Loop", async ({ request }) => {
+test("CRUD API Flow Loop", async ({ request }) => {  // CRUD operations in a loop
   const LOOP_COUNT = 1;
 
   for (let i = 1; i <= LOOP_COUNT; i++) {
@@ -12,20 +12,20 @@ test("CRUD API Flow Loop", async ({ request }) => {
     //
     // ✅ CREATE
     //
-    const userData = generateUser();
+    const userData = generateUser();  // Generate user data
     const createRes = await createUser(request, userData);
     expect(createRes.status()).toBe(StatusCodes.CREATED);
 
-    const created = await createRes.json();
+    const created = await createRes.json(); // Created user response
     console.log("✅ Created:", created);
-    const userId = created._id;
+    const userId = created._id;  // Store the created user ID
 
 
     //
     // ✅ GET (after create)
     //
     const getRes = await getUser(request, userId);
-    expect(getRes.status()).toBe(StatusCodes.OK);
+    expect(getRes.status()).toBe(StatusCodes.OK); // Verify GET status
 
     const fetched = await getRes.json();
     console.log("✅ Fetched:", fetched);
@@ -55,7 +55,7 @@ test("CRUD API Flow Loop", async ({ request }) => {
     // ✅ DELETE
     //
     const deleteRes = await deleteUser(request, userId);
-    expect([StatusCodes.OK, StatusCodes.DELETED]).toContain(deleteRes.status());
+    expect([StatusCodes.OK, StatusCodes.DELETED]).toContain(deleteRes.status()); // Accepting 200 or 204 for delete
     console.log("✅ Deleted:", userId);
   }
 });

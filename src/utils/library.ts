@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+import { faker } from "@faker-js/faker"; // Importing faker library for generating fake data
 
 export const generateUser = () => ({
   name: faker.person.fullName(),
