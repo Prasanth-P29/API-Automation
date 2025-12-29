@@ -18,5 +18,5 @@ export const updateUserSchema: JSONSchemaType<UpdateUserResponse> = {  // Define
     avatar: { type: "string" },
   },
   required: ["name", "age", "job", "_id"],
-  additionalProperties: false,
+  additionalProperties: true,
 };
