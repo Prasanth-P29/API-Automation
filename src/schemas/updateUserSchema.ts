@@ -4,7 +4,7 @@ export interface UpdateUserResponse { // Define the interface for the update use
   name: string;
   age: number;
   job: string;
-  _id: string;
+  _id: number;
 }
 
 export const updateUserSchema: JSONSchemaType<UpdateUserResponse> = {  // Define the JSON schema for update user response
@@ -13,7 +13,7 @@ export const updateUserSchema: JSONSchemaType<UpdateUserResponse> = {  // Define
     name: { type: "string" },
     age: { type: "integer", minimum: 18, maximum: 60 },
     job: { type: "string" },
-    _id: { type: "string" },
+    _id: { type: "integer" },
     createdAt: { type: "string" },
     avatar: { type: "string" },
   },
