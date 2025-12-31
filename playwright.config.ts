@@ -44,10 +44,10 @@ export default defineConfig({
     //   name: 'api',
     // }
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
     // {
     //   name: 'webkit',
